@@ -17,21 +17,21 @@ async def search(keyword: str, db: Session = Depends(get_db)):
     results = crawler.search_papers(keyword)
     processed_results = []
     for paper in results:
-        # # Extract keywords and generate summary
-        # keywords = nlp.extract_keywords(paper["abstract"])
-        # summary = nlp.generate_summary(paper["abstract"])
-        # # Add to paper dict
-        # paper["keywords"] = keywords
-        # paper["summary"] = summary
+        # Extract keywords and generate summary
+        keywords = nlp.extract_keywords(paper["abstract"])
+        summary = nlp.generate_summary(paper["abstract"])
+        # Add to paper dict
+        paper["keywords"] = keywords
+        paper["summary"] = summary
         # Save to database
         saved_paper = save_paper(db, paper, keyword)
         processed_results.append({
             "title": saved_paper.title,
             "abstract": saved_paper.abstract,
             "link": saved_paper.link,
-            "published": saved_paper.published
-            # "keywords": saved_paper.keywords.split(",") if saved_paper.keywords else [],
-            # "summary": saved_paper.summary
+            "published": saved_paper.published,
+            "keywords": saved_paper.keywords.split(",") if saved_paper.keywords else [],
+            "summary": saved_paper.summary
         })
     return {"results": processed_results}
 
@@ -47,7 +47,7 @@ async def get_papers(keyword: str, db: Session = Depends(get_db)):
             "abstract": p.abstract,
             "link": p.link,
             "published": p.published,
-            # "keywords": p.keywords.split(",") if p.keywords else [],
-            # "summary": p.summary
+            "keywords": p.keywords.split(",") if p.keywords else [],
+            "summary": p.summary
         } for p in papers]
     }

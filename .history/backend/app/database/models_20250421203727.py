@@ -1,26 +1,25 @@
-# database.py
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import datetime
 
 Base = declarative_base()
 
 class Paper(Base):
-    """Research paper database model"""
     __tablename__ = "papers"
     
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
+    title = Column(String(200), nullable=False)
     abstract = Column(Text, nullable=False)
-    link = Column(String, nullable=False)
+    link = Column(String(500), nullable=False)
     published = Column(DateTime, nullable=False)
-    keyword = Column(String, nullable=False)
+    keyword = Column(String(50), nullable=False, index=True)
 
-# Database configuration
 DATABASE_URL = "sqlite:///papers.db"
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False},
+    pool_size=5
 )
 
 SessionLocal = sessionmaker(
@@ -29,5 +28,4 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-# Create tables
 Base.metadata.create_all(bind=engine)

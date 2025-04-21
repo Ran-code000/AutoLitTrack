@@ -19,8 +19,8 @@ def save_paper(db: Session, paper: dict, keyword: str):
         link=paper["link"],
         published=datetime.fromisoformat(paper["published"].replace("Z", "")),
         keyword=keyword,
-        # keywords=",".join(paper.get("keywords", [])) if paper.get("keywords") else "",
-        # summary=paper.get("summary", "")
+        keywords=",".join(paper.get("keywords", [])) if paper.get("keywords") else "",
+        summary=paper.get("summary", "")
     )
     db.add(db_paper)
     db.commit()

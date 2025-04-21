@@ -51,15 +51,15 @@ if __name__ == "__main__":
     crawler = ArxivCrawler(max_results=3)
     results = crawler.search_papers("machine learning")
     
-    if save_paper:
-        try:
-            db = next(get_db())
-            for paper in results:
-                saved_paper = save_paper(db, paper, "machine learning")
-                print(f"Saved: {saved_paper.title}")
-        except Exception as e:
-            print(f"Error saving to database: {e}")
-    else:
+    # if save_paper:
+    #     try:
+    #         db = next(get_db())
+    #         for paper in results:
+    #             saved_paper = save_paper(db, paper, "machine learning")
+    #             print(f"Saved: {saved_paper.title}")
+    #     except Exception as e:
+    #         print(f"Error saving to database: {e}")
+    # else:
         for paper in results:
             print(f"Title: {paper['title']}")
             print(f"Abstract: {paper['abstract'][:100]}...")

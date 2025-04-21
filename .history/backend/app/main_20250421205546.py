@@ -47,7 +47,7 @@ async def get_papers(keyword: str, db: Session = Depends(get_db)):
             "abstract": p.abstract,
             "link": p.link,
             "published": p.published,
-            # "keywords": p.keywords.split(",") if p.keywords else [],
-            # "summary": p.summary
+            "keywords": p.keywords.split(",") if p.keywords else [],
+            "summary": p.summary
         } for p in papers]
     }

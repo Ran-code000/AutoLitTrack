@@ -1,5 +1,6 @@
 # database.py
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
+from sqlalchemy.ext.declarative import 
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
