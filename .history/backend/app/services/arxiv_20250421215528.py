@@ -2,8 +2,8 @@ import requests
 from typing import List, Dict
 from xml.etree import ElementTree as ET
 from urllib.parse import quote
-from ..database.crud import save_paper, get_papers_by_keyword
-from ..database.config import SessionLocal, get_db
+from ..database.crud import save_paper, get_db, get_papers_by_keyword
+from ..database.con import SessionLocal
 
 class ArxivCrawler:
     BASE_URL = "https://export.arxiv.org/api/query"

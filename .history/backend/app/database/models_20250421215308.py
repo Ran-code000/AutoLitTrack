@@ -17,5 +17,18 @@ class Paper(Base):
     published = Column(DateTime, nullable=False)
     keyword = Column(String, nullable=False)
 
+# Database configuration
+DATABASE_URL = "sqlite:///papers.db"
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
 # Create tables
 Base.metadata.create_all(bind=engine)

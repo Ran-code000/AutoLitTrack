@@ -3,6 +3,13 @@ from .models import Paper
 from .config import get_db, SessionLocal  # Import from config
 from datetime import datetime
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 def save_paper(db: Session, paper: dict, keyword: str):
     """
     Save a paper to the database, including keywords and summary.
