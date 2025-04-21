@@ -2,8 +2,7 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from .services.arxiv import ArxivCrawler
 from .services.nlp import NLPProcessor
-from .database.crud import save_paper, get_papers_by_keyword
-from .database.config import get_db
+from .database.crud import save_paper, get_papers_by_keyword, get_db
 
 
 app = FastAPI()
@@ -24,15 +23,15 @@ async def search(keyword: str, db: Session = Depends(get_db)):
         # Add to paper dict
         paper["keywords"] = keywords
         paper["summary"] = summary
-        # Save to database
+        Save to database
         saved_paper = save_paper(db, paper, keyword)
         processed_results.append({
             "title": saved_paper.title,
             "abstract": saved_paper.abstract,
             "link": saved_paper.link,
-            "published": saved_paper.published,
-            "keywords": saved_paper.keywords.split(",") if saved_paper.keywords else [],
-            "summary": saved_paper.summary
+            "published": saved_paper.published
+            # "keywords": saved_paper.keywords.split(",") if saved_paper.keywords else [],
+            # "summary": saved_paper.summary
         })
     return {"results": processed_results}
 
@@ -48,7 +47,7 @@ async def get_papers(keyword: str, db: Session = Depends(get_db)):
             "abstract": p.abstract,
             "link": p.link,
             "published": p.published,
-            "keywords": p.keywords.split(",") if p.keywords else [],
-            "summary": p.summary
+            # "keywords": p.keywords.split(",") if p.keywords else [],
+            # "summary": p.summary
         } for p in papers]
     }

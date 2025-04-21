@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from .services.arxiv import ArxivCrawler
 from .services.nlp import NLPProcessor
 from .database.crud import save_paper, get_papers_by_keyword
-from .database.config import get_db
+
 
 
 app = FastAPI()

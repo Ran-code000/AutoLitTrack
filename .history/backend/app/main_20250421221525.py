@@ -2,8 +2,7 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from .services.arxiv import ArxivCrawler
 from .services.nlp import NLPProcessor
-from .database.crud import save_paper, get_papers_by_keyword
-from .database.config import get_db
+from .database.crud import save_paper, get_papers_by_keyword, get_db
 
 
 app = FastAPI()
