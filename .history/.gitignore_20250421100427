@@ -1,0 +1,68 @@
+cd ~/Desktop/LitGenius
+cat <<EOL > .gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+*.egg-info/
+pip-wheel-metadata/
+.pipx/
+.env
+*.env
+
+# SQLite Database
+papers.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Node.js (Frontend)
+node_modules/
+dist/
+dist-ssr/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Model Cache
+models/
+distilbart-cnn/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+
+# Test and Build Artifacts
+.pytest_cache/
+coverage/
+.coverage
+*.cov
+junit.xml
+htmlcov/
+
+# Temporary Files
+*.bak
+*.swp
+*~
+*.tmp
+
+# Miscellaneous
+*.lock
+*.pid
+*.seed
+*.gz
+*.zip
+*.tar
+EOL
