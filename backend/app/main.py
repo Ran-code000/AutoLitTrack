@@ -4,11 +4,20 @@ from .services.arxiv import ArxivCrawler
 from .services.nlp import NLPProcessor
 from .database.crud import save_paper, get_papers_by_keyword
 from .database.config import get_db
-
+from .services.scheduler import Scheduler
 
 app = FastAPI()
 crawler = ArxivCrawler(max_results=5)
 nlp = NLPProcessor()
+scheduler = Scheduler()
+
+@app.on_event("startup")
+async def startup_event():
+    scheduler.start()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    scheduler.shutdown()
 
 @app.get("/search")
 async def search(keyword: str, db: Session = Depends(get_db)):
