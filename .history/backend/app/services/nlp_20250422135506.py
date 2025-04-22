@@ -16,7 +16,7 @@ class NLPProcessor:
             dedupLim=0.9,      # Deduplication threshold
             top=5,             # Number of keywords
             features=None 
-        ) 
+        )
         
         # Initialize DistilBART-CNN
         self.model_name = model_name

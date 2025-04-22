@@ -1,4 +1,3 @@
-
 # database.py
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.orm import declarative_base
@@ -21,4 +20,4 @@ class Paper(Base):
     summary = Column(Text)   # Store generated summary
 
 # Create tables
-Base.metadata.create_all(bind=engine) 
+Base.metadata.create_all(bind=engine)

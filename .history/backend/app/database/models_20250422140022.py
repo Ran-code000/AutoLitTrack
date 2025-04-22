@@ -1,4 +1,3 @@
-
 # database.py
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.orm import declarative_base

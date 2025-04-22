@@ -25,4 +25,4 @@ def get_papers_by_keyword(db: Session, keyword: str, limit: int = 10):
     """
     Retrieve papers by keyword.
     """
-    return db.query(Paper).filter(Paper.keyword.ilike(f"%{keyword}%")).limit(limit).all() 
+    return db.query(Paper).filter(Paper.keyword.ilike(f"%{keyword}%")).limit(limit).all()
