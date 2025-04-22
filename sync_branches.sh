@@ -11,6 +11,6 @@ for branch in $remote_branches; do
   else
     git checkout -b "$branch" origin/"$branch"
   fi
-done
+done 
 
 git checkout - 
