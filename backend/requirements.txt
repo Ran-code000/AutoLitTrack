@@ -16,4 +16,7 @@ transformers==4.44.2
 
 torch==2.4.1
 
-tqdm==4.66.5
+tqdm==4.66.5apscheduler>=3.10
+
+pytest-asyncio>=0.26.0
+ 

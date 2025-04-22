@@ -11,6 +11,13 @@ async def search(keyword: str, db: Session = Depends(get_db)):
     results = crawler.search_papers(keyword)
     saved_papers = []
     for paper in results:
+        # Extract keywords and generate summary
+        keywords = nlp.extract_keywords(paper["abstract"])
+        summary = nlp.generate_summary(paper["abstract"])
+        # Add to paper dict
+        paper["keywords"] = keywords
+        paper["summary"] = summary 
+        # Save to database
         saved_paper = save_paper(db, paper, keyword)
         saved_papers.append(saved_paper)
     return {"results": [{"title": p.title, "abstract": p.abstract, "link": p.link, "published": p.published} for p in saved_papers]}
