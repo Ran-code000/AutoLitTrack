@@ -61,3 +61,8 @@ async def get_papers(keyword: str, db: Session = Depends(get_db)):
             "summary": p.summary
         } for p in papers]
     }
+
+
+@app.get("/scheduler/status")
+async def scheduler_status():
+    return scheduler.get_status()
