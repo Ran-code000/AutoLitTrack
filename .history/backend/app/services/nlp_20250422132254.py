@@ -55,7 +55,7 @@ class NLPProcessor:
         try:
             text = text.strip()
             if not text:
-                return None
+        return None
             inputs = self.tokenizer(
                 text,
                 return_tensors="pt",

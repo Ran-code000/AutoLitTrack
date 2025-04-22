@@ -27,7 +27,6 @@ def test_extract_keywords(nlp_processor):
     """
     keywords = nlp_processor.extract_keywords(SAMPLE_TEXT)
     print(f"Extracted keywords: {keywords}")  # Debug output
-
     # Check that keywords are returned as a list
     assert isinstance(keywords, list), "Keywords should be a list"
     
@@ -78,7 +77,7 @@ def test_generate_summary_long_input(nlp_processor):
     """
     Test summary generation with a long input that exceeds the tokenizer's max length.
     """
-    long_text = SAMPLE_TEXT * 10  # Create a very long text
+    long_text = SAMPLE_TEXT * 100  # Create a very long text
     summary = nlp_processor.generate_summary(long_text)
     
     # Check that a summary is still generated despite truncation

@@ -53,9 +53,6 @@ class NLPProcessor:
             Generated summary or None if an error occurs.
         """
         try:
-            text = text.strip()
-            if not text:
-                return None
             inputs = self.tokenizer(
                 text,
                 return_tensors="pt",
