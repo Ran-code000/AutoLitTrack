@@ -7,13 +7,20 @@ def save_paper(db: Session, paper: dict, keyword: str):
     """
     Save a paper to the database, including keywords and summary.
     """
+    published = paper.get("published")
+    if isinstance(published, str):
+        try:
+            published = datetime.fromisoformat(published.replace("Z", "+00:00"))
+        except ValueError:
+            published = None
+
     db_paper = Paper(
-        title=paper["title"],
-        abstract=paper["abstract"],
-        link=paper["link"],
-        published=datetime.fromisoformat(paper["published"].replace("Z", "")),
+        title=paper.get("title"),
+        abstract=paper.get("abstract"),
+        link=paper.get("link"),
+        published=published,
         keyword=keyword,
-        keywords=",".join(paper.get("keywords", [])) if paper.get("keywords") else "",
+        keywords=",".join(paper.get("keywords", [])),
         summary=paper.get("summary", "")
     )
     db.add(db_paper)

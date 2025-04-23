@@ -31,12 +31,6 @@ jobs:
         env:
           PYTHONPATH: .  # Ensure backend modules are importable
 
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage.xml
-          token: ${{ secrets.CODECOV_TOKEN }}  # Optional, if using Codecov
-
   frontend-build:
     runs-on: ubuntu-latest
     steps:

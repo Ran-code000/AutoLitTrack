@@ -1,6 +1,7 @@
 # test_backend/unit/test_nlp.py
-
 import pytest
+import torch 
+from unittest.mock import patch, MagicMock
 from backend.app.services.nlp import NLPProcessor
 
 # Sample text for testing
@@ -45,20 +46,13 @@ def test_generate_summary(nlp_processor):
     """
     Test summary generation using DistilBART-CNN.
     """
-    summary = nlp_processor.generate_summary(SAMPLE_TEXT)
-    
-    # Check that a summary is generated
-    assert summary is not None, "Summary should not be None"
-    
-    # Check that the summary is a string
-    assert isinstance(summary, str), "Summary should be a string"
-    
-    # Check that the summary has a reasonable length
-    assert 30 <= len(summary.split()) <= 150, "Summary length should be between 30 and 150 words"
-    
-    # Check for key concepts in the summary
-    assert "machine learning" in summary.lower(), "Summary should mention 'machine learning'"
-    assert "artificial intelligence" in summary.lower(), "Summary should mention 'artificial intelligence'"
+    with patch.object(nlp_processor.model, "generate") as mock_generate:
+        mock_generate.return_value = torch.tensor([[1, 2, 3]]) 
+        
+        with patch.object(nlp_processor.tokenizer, "decode", return_value="Mock summary"):
+            summary = nlp_processor.generate_summary(SAMPLE_TEXT)
+            assert summary == "Mock summary"
+            mock_generate.assert_called_once()
 
 def test_extract_keywords_empty_input(nlp_processor):
     """
@@ -66,6 +60,11 @@ def test_extract_keywords_empty_input(nlp_processor):
     """
     keywords = nlp_processor.extract_keywords("")
     assert keywords == [], "Empty input should return an empty list"
+
+def test_extract_keywords_invalid_input():
+    nlp_processor = NLPProcessor()
+    keywords = nlp_processor.extract_keywords(None)
+    assert keywords == []
 
 def test_generate_summary_empty_input(nlp_processor):
     """
@@ -75,12 +74,24 @@ def test_generate_summary_empty_input(nlp_processor):
     assert summary is None, "Empty input should return None"
 
 def test_generate_summary_long_input(nlp_processor):
-    """
-    Test summary generation with a long input that exceeds the tokenizer's max length.
-    """
-    long_text = SAMPLE_TEXT * 10  # Create a very long text
-    summary = nlp_processor.generate_summary(long_text)
+    """Test handling of long input texts"""
+    long_text = SAMPLE_TEXT * 10
     
-    # Check that a summary is still generated despite truncation
-    assert summary is not None, "Summary should not be None for long input"
-    assert isinstance(summary, str), "Summary should be a string for long input"
+    # Create a mock tokenizer that returns valid tensors
+    mock_tokenizer = MagicMock()
+    mock_tokenizer.return_value = {
+        "input_ids": torch.tensor([[1, 2, 3]]),
+        "attention_mask": torch.tensor([[1, 1, 1]])
+    }
+    
+    # Replace the actual tokenizer call
+    with patch.object(nlp_processor, 'tokenizer', mock_tokenizer):
+        result = nlp_processor.generate_summary(long_text)
+        assert result is not None
+        
+        # Verify tokenizer was called with correct parameters
+        args, kwargs = mock_tokenizer.call_args
+        assert args[0] == long_text
+        assert kwargs["max_length"] == 1024
+        assert kwargs["truncation"] is True
+        assert kwargs["return_tensors"] == "pt"

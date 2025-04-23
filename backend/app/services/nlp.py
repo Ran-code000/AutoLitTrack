@@ -15,12 +15,15 @@ class NLPProcessor:
             n=2,               # Maximum n-gram size
             dedupLim=0.9,      # Deduplication threshold
             top=5,             # Number of keywords
-            features=None 
+            features=None
         ) 
         
         # Initialize DistilBART-CNN
         self.model_name = model_name
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name,
+            clean_up_tokenization_spaces=True
+        )
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name)
         
         # Use FP16 quantization and move to GPU if available
@@ -72,25 +75,13 @@ class NLPProcessor:
                 num_beams=4,
                 early_stopping=True
             )
-            summary = self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+            summary = self.tokenizer.decode(
+                summary_ids[0], 
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=True
+            )
             return summary
         except Exception as e:
             print(f"Error generating summary: {e}")
             return None
 
-if __name__ == "__main__":
-    # Test the NLPProcessor
-    nlp = NLPProcessor()
-    sample_text = (
-        "Machine learning is a method of data analysis that automates analytical model building. "
-        "It is a branch of artificial intelligence based on the idea that systems can learn "
-        "from data, identify patterns and make decisions with minimal human intervention."
-    )
-    
-    # Test keyword extraction
-    keywords = nlp.extract_keywords(sample_text)
-    print(f"Keywords: {keywords}")
-    
-    # Test summary generation
-    summary = nlp.generate_summary(sample_text)
-    print(f"Summary: {summary}")

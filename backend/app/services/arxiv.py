@@ -14,6 +14,9 @@ class ArxivCrawler:
         Search arXiv papers by keyword using the arXiv API.
         Returns a list of dictionaries containing paper details.
         """
+        if not keyword.strip():
+            return []
+            
         # Encode keyword for URL
         query = quote(keyword)
         url = f"{self.BASE_URL}?search_query=all:{query}&start=0&max_results={self.max_results}"
@@ -44,15 +47,3 @@ class ArxivCrawler:
             print(f"Error parsing XML: {e}")
             return []
 
-# Example usage (for testing)
-if __name__ == "__main__":  
-    crawler = ArxivCrawler(max_results=3)
-    results = crawler.search_papers("machine learning")
-    
-
-    for paper in results:
-        print(f"Title: {paper['title']}")
-        print(f"Abstract: {paper['abstract'][:100]}...")
-        print(f"Link: {paper['link']}")
-        print(f"Published: {paper['published']}")  # Added published field
-        print("---" * 20)

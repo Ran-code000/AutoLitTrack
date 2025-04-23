@@ -1,9 +1,7 @@
-
-# database.py
+# models.py
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.orm import declarative_base
 import datetime
-from .config import engine  # Import engine from config
 
 Base = declarative_base()
 
@@ -20,5 +18,4 @@ class Paper(Base):
     keywords = Column(Text)  # Store keywords as comma-separated string
     summary = Column(Text)   # Store generated summary
 
-# Create tables
-Base.metadata.create_all(bind=engine) 
+
