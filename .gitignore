@@ -4,8 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
-backend/litgenius_venv/
-litgenius_venv/
+backend/AutoLitTrack_venv/
+AutoLitTrack_venv/
 *.egg-info/
 pip-wheel-metadata/
 .pipx/
