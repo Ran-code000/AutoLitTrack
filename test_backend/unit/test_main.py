@@ -36,6 +36,12 @@ def db_session():
         session.close()
         # Drop tables and close connections
         Base.metadata.drop_all(bind=engine)
+        engine.dispose()
+        if os.path.exists(TEST_DB_PATH):
+            try:
+                os.remove(TEST_DB_PATH)
+            except PermissionError:
+                print(f"Warning: Could not delete {TEST_DB_PATH} due to file lock")
 
 @pytest.fixture(scope="function")
 def client(db_session):

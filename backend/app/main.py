@@ -1,16 +1,19 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from sqlalchemy.orm import Session
 from .services.arxiv import ArxivCrawler
 from .services.nlp import NLPProcessor
 from .database.crud import save_paper, get_papers_by_keyword
-from .database.config import get_db
+from .database.config import get_db, init_db
 from .services.scheduler import Scheduler
 
 app = FastAPI()
 crawler = ArxivCrawler(max_results=5)
 nlp = NLPProcessor()
 scheduler = Scheduler()
+
+init_db()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -69,3 +72,13 @@ async def get_papers(keyword: str, db: Session = Depends(get_db)):
 @app.get("/scheduler/status")
 async def scheduler_status():
     return scheduler.get_status()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+

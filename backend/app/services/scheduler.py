@@ -32,9 +32,9 @@ class Scheduler:
         # Daily task: Fetch papers at 2:00 AM
         self.scheduler.add_job( 
             self.fetch_and_save_papers,
-            trigger="interval",
-            seconds=10,  
-            # trigger=CronTrigger(hour=2, minute=0),
+            # trigger="interval",
+            # seconds=10,  
+            trigger=CronTrigger(hour=2, minute=0),
             id="daily_fetch_papers",
             replace_existing=True,
             kwargs={"keyword": "machine learning"}

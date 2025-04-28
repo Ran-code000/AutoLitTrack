@@ -1,3 +1,4 @@
+import os
 import pytest
 from unittest.mock import Mock, patch
 from datetime import datetime
@@ -6,17 +7,33 @@ from backend.app.database.models import Base, Paper
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+TEST_DB_PATH = "test.db"
+engine = create_engine(
+    f"sqlite:///{TEST_DB_PATH}", 
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False, 
+    autoflush=False, 
+    bind=engine
+)
 @pytest.fixture
 def db_session():
-    engine = create_engine("sqlite:///:memory:", connect_args={"check_same_thread": False})
     Base.metadata.create_all(bind=engine)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     session = SessionLocal()
     try:
         yield session
     finally:
+        session.rollback()
         session.close()
         Base.metadata.drop_all(bind=engine)
+        engine.dispose()
+        if os.path.exists(TEST_DB_PATH):
+            try:
+                os.remove(TEST_DB_PATH)
+            except PermissionError:
+                print(f"Warning: Could not delete {TEST_DB_PATH} due to file lock")
 
 @pytest.mark.asyncio
 async def test_fetch_and_save_papers(db_session):

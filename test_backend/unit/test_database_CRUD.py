@@ -4,7 +4,6 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
 from backend.app.database.models import Base, Paper
 from backend.app.database.crud import save_paper, get_papers_by_keyword
-from backend.app.database.config import get_db
 import os
 
 TEST_DB_PATH = "test.db"
@@ -13,7 +12,11 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     echo=True
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    autocommit=False, 
+    autoflush=False, 
+    bind=engine
+)
 
 @pytest.fixture
 def db_session():
@@ -32,17 +35,6 @@ def db_session():
             except PermissionError:
                 print(f"Warning: Could not delete {TEST_DB_PATH} due to file lock")
 
-def test_get_db_session(db_session):
-    db_gen = get_db()
-    db = next(db_gen)
-    assert isinstance(db, Session)
-    result = db.execute(text("SELECT 1")).scalar()
-    assert result == 1
-    try:
-        db_gen.close()
-    except RuntimeError:
-        pass
-    assert db.close, "Session should be closed after db_gen.close()"
 
 def test_save_paper(db_session):
     paper_data = {

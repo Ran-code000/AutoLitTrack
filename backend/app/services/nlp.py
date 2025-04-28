@@ -27,7 +27,7 @@ class NLPProcessor:
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name)
         
         # Use FP16 quantization and move to GPU if available
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "xpu" if torch.xpu.is_available() else "cpu"
         self.model = self.model.half().to(self.device)
     
     def extract_keywords(self, text: str) -> List[str]:
